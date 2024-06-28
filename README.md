@@ -1,10 +1,14 @@
-# Nuxt 3 Minimal Starter
+# Code Sandbox
+[Nuxt3](https://nuxt.com/) + Vue + [Kongponents](github.com/Kong/kongponents)
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Deployed to [Vercel](https://vercel.com/)
+
+## Live Demo
+https://sandbox.mihaipet.eu/
 
 ## Setup
 
-Make sure to install the dependencies:
+Install dependencies:
 
 ```bash
 # npm
