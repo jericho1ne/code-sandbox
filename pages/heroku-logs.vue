@@ -1,23 +1,24 @@
 <template>
   <NuxtPage page-key="friends" />
   <h1>Heroku Log Parsing</h1>
-  <div v-for="logLine in herokuLog" :key="String(logLine.path)" class="path-group" truncation-tooltip>
-    <KCollapse :title="`${logLine.method }  ${ logLine.path }`" trigger-label="Show requests">
-      <template #visible-content>
-        <div class="path-row">
-          <span class="path-row-count">{{ logLine.count }} x requests</span>
-          <span class="path-row-bytes">{{ approxNum(logLine.bytesTotal / 1000), { capital: true } }}kb total</span>
-          <span class="path-row-latency">Avg Latency: {{ approxNum(calcAvgLatency(logLine.requests)), { capital: true }
-            }}ms</span>
-        </div>
-      </template>
-
-      <!-- Content hidden in KCollapse -->
-      <div v-for="(request, i) in logLine.requests" :key="i" class="request-row">
-        <span>{{ request.path }}</span>
+  <KCollapse v-for="(logLine, i) in herokuLog" :key="String(logLine.path)" class="path-group"
+    :model-value="i === 0 ? false : true" :title="`${logLine.method}  ${logLine.path}`"
+    trigger-label="Show all requests">
+    <template #visible-content>
+      <div class="path-row">
+        <span class="path-row-count">{{ logLine.count }} x requests</span>
+        <span class="path-row-bytes">{{ approxNum(logLine.bytesTotal / 1000), { capital: true } }}kb total</span>
+        <span class="path-row-latency">Avg Latency: {{ approxNum(calcAvgLatency(logLine.requests)), { capital: true }
+          }}ms</span>
       </div>
-    </KCollapse>
-  </div>
+    </template>
+
+    <!-- Content hidden in KCollapse -->
+    <div v-for="(request, i) in logLine.requests" :key="i" class="request-row">
+      <span class="request-status">{{ request.status }}</span>
+      <span>{{ request.path }}</span>
+    </div>
+  </KCollapse>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +31,7 @@ import type { LogLine, LogLineEnhanced } from '@/types'
 import { KCollapse } from '@kong/kongponents'
 
 //
+const isCollapsed: Boolean = ref(false)
 const herokuLog: Ref<LogLineEnhanced[]> = ref([])
 const fetchData = async() => {
   const logUrl = 'https://gist.githubusercontent.com/bss/6dbc7d4d6d2860c7ecded3d21098076a/raw/244045d24337e342e35b85ec1924bca8425fce2e/sample.small.log'
@@ -131,7 +133,7 @@ onMounted(() => {
   --kui-font-family-text: 'Source Code Pro', 'Courier New', Courier, monospace;
   margin: 4px 0;
   padding: 12px;
-  background: rgba(100,200,150, 0.5);
+  background: rgba(100,160,140, 0.25);
   border-radius: 4px;
 
   .path-row {
@@ -170,6 +172,13 @@ onMounted(() => {
     border-radius: 4px;
     font-size: 11px;
     font-weight: 500;
+
+    .request-status {
+      border: 1px solid #333;
+      border-radius: 4px;
+      margin-right: 6px;
+      padding: 1px 2px;
+    }
   }
 
 }
