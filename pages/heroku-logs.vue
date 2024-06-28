@@ -127,51 +127,40 @@ onMounted(() => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .path-group {
   --kui-font-family-text: 'Source Code Pro', 'Courier New', Courier, monospace;
   margin: 4px 0;
   padding: 12px;
-  background: rgba(100,160,140, 0.25);
+  background: #eee;
   border-radius: 4px;
+
+  &:deep(.collapse-title) {
+    font-size: 14px !important;
+    font-weight: 300 !important;
+    letter-spacing: -0.5px !important;
+  }
 
   .path-row {
     border-radius: 4px;
-    font-size: 14px;
     display: flex;
     justify-content: space-between;
     padding: 6px;
-    background: rgba(0, 0, 0, 0.15);
+    background: #ccc;
 
     .path-row-count { width: 22ch; }
-
-    .path-row-title {
-      max-width: 54ch;
-      overflow: hidden;
-      margin: auto auto auto 0;
-      text-overflow: ellipsis;
-      border: 2px px solid;
-      font-weight: 500;
-      letter-spacing: -0.5px;
-    }
-
-    .path-row-bytes {
-      width: 20ch;
-    }
-
-    .path-row-latency {
-      width: auto;
-    }
+    .path-row-bytes { width: 20ch; }
+    .path-row-latency { width: auto; }
   }
 
   .request-row {
-    background: rgba(255,255,255, 0.5);
+    background: #fff;
     margin-top: 8px;
     padding: 4px 6px;
     border-radius: 4px;
     font-size: 11px;
-    font-weight: 500;
+    font-weight: 300;
 
     .request-status {
       border: 1px solid #333;

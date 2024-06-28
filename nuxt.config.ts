@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   alias: {
     "@types": "./types",
     "@utils": "./utils",
+    "@components": "./components",
   },
   devtools: { enabled: true },
   nitro: {
@@ -12,5 +13,6 @@ export default defineNuxtConfig({
     }
   },
   css: ['~/assets/styles/main.scss'],
-  // plugins: ['~/plugins/']
+  // Plugins root folder is auto-scanned
+  // plugins: ['~/plugins/subdir']
 })
