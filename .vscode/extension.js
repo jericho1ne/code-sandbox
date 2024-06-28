@@ -1,0 +1,6 @@
+ "recommendations": [
+    "Vue.volar",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "mrmlnc.vscode-scss"
+ ]

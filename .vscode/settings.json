@@ -1,0 +1,26 @@
+{
+  "markdown.extension.toc.levels": "2..3",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "editor.formatOnPaste": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "files.insertFinalNewline": true,
+  "eslint.format.enable": true,
+  "eslint.validate": [
+    "typescript",
+    "javascript",
+    "javascriptreact",
+    "vue",
+    "json"
+  ],
+  "scss.scannerExclude": [
+    "**/.git",
+    "**/bower_components",
+    "**/node_modules"
+  ]
+}
