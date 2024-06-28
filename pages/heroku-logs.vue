@@ -166,7 +166,7 @@ onMounted(() => {
       border: 1px solid #333;
       border-radius: 4px;
       margin-right: 6px;
-      padding: 1px 2px;
+      padding: 2px 4px;
     }
   }
 

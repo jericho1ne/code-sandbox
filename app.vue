@@ -1,7 +1,9 @@
 <template>
   <Navigation />
   <!-- Nuxt page content -->
-  <RouterView />
+  <main class="nuxt-page">
+    <RouterView />
+  </main>
 </template>
 
 <script setup lang="ts">

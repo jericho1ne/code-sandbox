@@ -1,13 +1,15 @@
 <template>
   <div class="navbar">
     <ul>
-      <li>
-        <RouterLink to="/">Home</RouterLink>
-      </li>
-      <li>
-        <RouterLink to="/heroku-logs">heroku logs</RouterLink>
-      </li>
-      <!-- <li><RouterLink to="/about">about</RouterLink></li> -->
+      <RouterLink to="/">
+        <li>home</li>
+      </RouterLink>
+      <RouterLink to="/heroku-logs">
+        <li>heroku logs</li>
+      </RouterLink>
+      <RouterLink to="/about">
+        <li>about</li>
+      </RouterLink>
     </ul>
   </div>
 </template>
@@ -18,8 +20,9 @@
 <style lang="scss" scoped>
 .navbar {
   display: flex;
+  margin-bottom: 16px;
   position: relative;
-  background: #fefefe;
+  background: linear-gradient(to top, #09203f 0%, #537895 100%);
   width: 100%;
 
   ul {
@@ -27,22 +30,23 @@
     flex-direction: row;
     justify-content: flex-start;
     list-style-type: none;
+    margin: 0;
     padding: 0;
     width: 100%;
 
+    a {
+      color: white;
+      font-size: 14px;
+      text-decoration: none;
+      border-right: 1px solid #bababa;
+    }
 
     li {
       padding: 10px 20px;
-      border-left: 1px solid;
-      font-size: 14px;
-      transition: 350ms background-color ease-in;
+      transition: 250ms background-color ease-out;
 
       &:last-of-type {
-        border-right: 1px solid;
-      }
-
-      a {
-        text-decoration: none;
+        border-right: none;
       }
 
       &:hover {

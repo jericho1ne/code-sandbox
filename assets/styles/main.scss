@@ -3,9 +3,16 @@
 html, body {
   font-family: 'Source Code Pro', 'Courier New', Courier, monospace;
   font-weight: 400;
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
   margin: 4px auto 20px 0;
   font-size: 18px;
+}
+
+
+main.nuxt-page {
+  padding: 16px;
 }
