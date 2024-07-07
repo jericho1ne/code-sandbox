@@ -1,92 +1,33 @@
 <template>
-  <NuxtPage page-key="friends" />
+  <NuxtPage page-key="heroku-logs" />
   <h1>Heroku Log Parsing</h1>
-  <KCollapse v-for="(logLine, i) in herokuLog" :key="String(logLine.path)" class="path-group"
-    :model-value="i === 0 ? false : true" :title="`${logLine.method}  ${logLine.path}`"
-    trigger-label="Show all requests">
+  <KCollapse
+    v-for="(logLine, i) in herokuLogs"
+    :key="String(logLine.path)"
+    :model-value="i === 0 ? false : true"
+    :title="`${logLine.method}  ${logLine.path}`"
+    trigger-label="Show all requests"
+    class="path-group"
+  >
+    <!-- Header row, always visible -->
     <template #visible-content>
-      <div class="path-row">
-        <span class="path-row-count">{{ logLine.count }} x requests</span>
-        <span class="path-row-bytes">{{ approxNum(logLine.bytesTotal / 1000), { capital: true } }}kb total</span>
-        <span class="path-row-latency">Avg Latency: {{ approxNum(calcAvgLatency(logLine.requests)), { capital: true }
-          }}ms</span>
-      </div>
+      <RequestRow :log-line="logLine" />
     </template>
 
     <!-- Content hidden in KCollapse -->
-    <div v-for="(request, i) in logLine.requests" :key="i" class="request-row">
-      <span class="request-status">{{ request.status }}</span>
-      <span>{{ request.path }}</span>
-    </div>
+    <RequestDetails :requests="logLine.requests" />
+
   </KCollapse>
 </template>
 
 <script setup lang="ts">
 // Imports
-import { onMounted, ref } from 'vue'
-import { fetchRawLogs } from '@/utils/FetcherMethods'
-import approxNum from 'approximate-number'
-import type { Ref } from 'vue'
 import type { LogLine, LogLineEnhanced } from '@/types'
+import RequestRow from '@/components/RequestRow.vue'
+import RequestDetails from '@/components/RequestDetails.vue'
 import { KCollapse } from '@kong/kongponents'
 
-//
-const isCollapsed: Boolean = ref(false)
-const herokuLog: Ref<LogLineEnhanced[]> = ref([])
-const fetchData = async() => {
-  const logUrl = 'https://gist.githubusercontent.com/bss/6dbc7d4d6d2860c7ecded3d21098076a/raw/244045d24337e342e35b85ec1924bca8425fce2e/sample.small.log'
-
-  try {
-    const response = await fetchRawLogs(logUrl)
-
-    let LogStats: Map<string, LogLineEnhanced> = new Map()
-
-    for (const line of response) {
-      const logLine = parseHerokuLogLine(line)
-      const path = logLine?.path || 'no_route'
-
-      // Strip out user id
-      const anonymizedPath = path.replace(/\/users\/(\d+)/, '/users/{id}')
-
-      if (logLine) {
-        const existingLogLine: LogLineEnhanced | undefined = LogStats.get(anonymizedPath)
-
-        // If path already exists in our Map, increment the count
-        // Else, it's the first time we've encountered this path
-        if (existingLogLine) {
-          const currCount = existingLogLine.count
-          const currBytes = existingLogLine.bytesTotal || 0
-
-          // Modify the Map object in place
-          existingLogLine.count = currCount + 1
-          existingLogLine.bytesTotal = currBytes + logLine.bytes
-          existingLogLine.requests?.push(logLine)
-        } else {
-          LogStats.set(anonymizedPath, {
-            path: anonymizedPath,
-            method: logLine.method,   // Only needs to be set the first time around
-            count: 1,
-            requests: [ logLine ],
-            bytesTotal: logLine.bytes,
-          })
-        }
-      }
-    }
-
-    // do some sort of inserting based on path name as key into a Map?
-    // const myMap = new Map(Object.entries(myObj));
-
-    herokuLog.value = [...LogStats].map(([key, value]) => ({
-      key,
-      ...value
-    }))
-
-    console.log(herokuLog.value)
-
-  } catch (error) {
-    console.error('Failed to fetch log data:', error);
-  }
-}
+const { data: herokuLogs } = await useFetch('/api/heroku-logs')
 
 const parseHerokuLogLine = (line: string): LogLine | null => {
   const parts = line.split(' ')
@@ -117,14 +58,6 @@ const parseHerokuLogLine = (line: string): LogLine | null => {
   }
 }
 
-const calcAvgLatency = ((requests: LogLine[]): number => {
-  return requests.reduce((sum, val) => sum + val.latency, 0) / requests.length
-})
-
-onMounted(() => {
-  fetchData()
-})
-
 </script>
 
 <style lang="scss" scoped>
@@ -141,34 +74,5 @@ onMounted(() => {
     font-weight: 300 !important;
     letter-spacing: -0.5px !important;
   }
-
-  .path-row {
-    border-radius: 4px;
-    display: flex;
-    justify-content: space-between;
-    padding: 6px;
-    background: #ccc;
-
-    .path-row-count { width: 22ch; }
-    .path-row-bytes { width: 20ch; }
-    .path-row-latency { width: auto; }
-  }
-
-  .request-row {
-    background: #fff;
-    margin-top: 8px;
-    padding: 4px 6px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 300;
-
-    .request-status {
-      border: 1px solid #333;
-      border-radius: 4px;
-      margin-right: 6px;
-      padding: 2px 4px;
-    }
-  }
-
 }
 </style>

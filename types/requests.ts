@@ -1,0 +1,15 @@
+export type LogLine = {
+  method: string
+  path: string
+  bytes: number
+  status: number
+  latency: number
+}
+
+export type LogLineEnhanced = {
+  count: number
+  method: string
+  path: string // Anonymized / wildcard path
+  bytesTotal: number
+  requests: LogLine[]
+}
