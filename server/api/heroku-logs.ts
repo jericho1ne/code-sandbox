@@ -74,9 +74,6 @@ export default defineEventHandler(async () => {
       }
     }
 
-    // do some sort of inserting based on path name as key into a Map?
-    // const myMap = new Map(Object.entries(myObj));
-
     herokuLog.value = [...LogStats].map(([key, value]) => ({
       key,
       ...value
