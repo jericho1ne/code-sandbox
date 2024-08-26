@@ -1,12 +1,14 @@
 <template>
   <NuxtPage page-key="about" />
   <h2>About</h2>
-  <p>Repo can be found at <a href="https://github.com/jericho1ne/code-sandbox">https://github.com/jericho1ne/code-sandbox</a></p>
-  <button id="form-submit" @click="activateConversion">Conversion Test</button>
+  <p>Repo can be found at <a
+      href="https://github.com/jericho1ne/code-sandbox">https://github.com/jericho1ne/code-sandbox</a></p>
+  <button id="contact-us" @click="activateConversion('bmg-contact-us')">Secondary Conversion Test</button>
+  <button id="form-submit" @click="activateConversion('bmg-form-submit')">Primary Conversion Test</button>
 </template>
 <script setup>
 
-const activateConversion = () =>  {
+const activateConversion = (eventName) =>  {
   try {
     var parentUrl = window.location.href
       ? window.location.href
@@ -15,11 +17,10 @@ const activateConversion = () =>  {
     if (parentUrl.includes('utm_source=googleads')) {
       dataLayer = window.dataLayer || []
       window.dataLayer.push({
-        event: 'bmg-form-submit',
+        event: eventName,
         conversionValue: 1,
-        formId: 'pardot-form',
       })
-      console.warn('🙌 >> form-submit fired.')
+      console.warn(`🙌 >> ${eventName} fired.`)
     }
   } catch (e) {
     window.console && window.console.log(e)
@@ -29,7 +30,8 @@ const activateConversion = () =>  {
 </script>
 
 <style lang="scss" scoped>
-#form-submit {
+#form-submit,
+#contact-us {
   display: none;
 }
 </style>
