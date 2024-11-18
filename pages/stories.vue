@@ -33,12 +33,14 @@
 
     <!-- Side pane for story details -->
     <div class="slideout-container">
-      <div
-        v-if="slideoutOpen && singleStory?.content"
-        class="slideout-panel"
-      >
-        {{ singleStory.content }}
-      </div>
+      <transition name="slideout">
+        <div
+          v-if="slideoutOpen && singleStory?.content"
+          class="slideout-panel"
+        >
+          {{ singleStory.content }}
+        </div>
+      </transition>
     </div>
   </div>
 </template>
@@ -49,13 +51,11 @@ import type { Ref } from 'vue'
 import type { StorySnippet, StoryFull } from '@/types'
 import { debounce } from '@/utils'
 
-const stories: StorySnippet[] = []
 const singleStory: Ref<StoryFull> = ref({} as StoryFull)
-
 const slideoutOpen = ref(false)
 const searchQuery = ref('')
 
-const filteredItems: Ref<StorySnippet[] | null> = ref(stories)
+const filteredItems: Ref<StorySnippet[] | null> = ref([] as StorySnippet[])
 
 const openSlideout = async(storyId: string) => {
   slideoutOpen.value = true
@@ -69,22 +69,19 @@ const openSlideout = async(storyId: string) => {
 }
 
 watch(searchQuery, () => {
-  if (searchQuery.value) {
-    debounce(() => {
-      filteredItems.value = query(searchQuery.value)
-    }, 750)()
-  }
+  debounce(() => {
+    filteredItems.value = query(searchQuery.value)
+  }, 750)()
 })
 
 onMounted(async() => {
   const { data: allStories } = await useFetch('/api/stories')
-
   filteredItems.value = allStories.value
 })
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .page-header {
   display: flex;
   flex-direction: column;
@@ -168,18 +165,19 @@ onMounted(async() => {
       color: black;
       text-overflow: ellipsis;
       overflow: scroll;
+      transition: all 0.3s ease-in;
     }
-    /* .full-story-text {
-      position: relative;
-      display: flex;
-      flex-grow: 1;
-      z-index: 100;
-
-      height: 100%;
-      width: 100% !important;
-
-
-    } */
   }
+}
+
+/* Transition */
+
+.slideout-enter-active,
+.slideout-leave-active {
+  transition: opacity 0.3s ease;
+}
+.slideout-enter-from,
+.slideout-leave-to {
+  opacity: 0;
 }
 </style>
