@@ -13,7 +13,12 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
-      routes: ['/', '/about', '/heroku-logs']
+      routes: [
+        '/',
+        '/about',
+        '/heroku-logs',
+        'stories',
+      ]
     }
   },
 

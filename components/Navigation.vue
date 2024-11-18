@@ -4,6 +4,9 @@
       <RouterLink to="/">
         <li>home</li>
       </RouterLink>
+       <RouterLink to="/stories">
+        <li>fairy tales</li>
+      </RouterLink>
       <RouterLink to="/heroku-logs">
         <li>heroku logs</li>
       </RouterLink>
