@@ -87,6 +87,13 @@ onMounted(async() => {
   flex-direction: column;
   padding: 10px 0;
   margin-bottom: 10px;
+
+  .search-query {
+    font-size: 18px;
+    padding: 6px;
+    width: 85%;
+    max-width: 680px;
+  }
 }
 
 .two-pane-layout {
